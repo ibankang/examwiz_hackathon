@@ -32,13 +32,13 @@
             android:name=".SubAdmin.subadmin_create_exam_activity"
             android:exported="false" />
         <activity
-            android:name=".Authentication.splash_screen_activity"
+            android:name=".Authentication.signup_activity"
             android:exported="false" />
         <activity
             android:name=".Authentication.login_activity"
             android:exported="false" />
         <activity
-            android:name=".Authentication.signup_activity"
+            android:name=".Authentication.splash_screen_activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
