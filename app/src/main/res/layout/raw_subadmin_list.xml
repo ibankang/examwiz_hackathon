@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="5dp"
+    android:layout_columnWeight="1"
+    android:orientation="vertical"
+    android:layout_rowWeight="1"
+    android:id="@+id/layout_cardview"
+    android:layout_margin="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            android:clickable="true"
+            android:onClick="onEditIconClicked"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/professor"
+            app:shapeAppearanceOverlay="@style/round_img"
+            app:strokeColor="@color/black_light"
+            app:strokeWidth="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Subadmin's Name"
+                android:id="@+id/subadmin_name_txt"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="example@gmail.com"
+                android:id="@+id/subadmin_email_txt"
+                android:textSize="17sp"/>
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="DD/MM/YYYY HH:MM"-->
+<!--                android:id="@+id/subadmin_create_date"-->
+<!--                android:textSize="17sp"/>-->
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:src="@drawable/more"
+            android:id="@+id/more_img"
+            android:layout_height="25dp"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
