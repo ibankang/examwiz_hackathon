@@ -6,11 +6,13 @@ import android.os.Bundle;
 
 import examwizhackathon.ibankang.com.R;
 
-public class signup_actitivity extends AppCompatActivity {
+public class signup_activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.signup_actitivity);
+        setContentView(R.layout.signup_activity);
+
+
     }
 }

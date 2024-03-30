@@ -38,7 +38,7 @@
             android:name=".Authentication.login_activity"
             android:exported="false" />
         <activity
-            android:name=".Authentication.signup_actitivity"
+            android:name=".Authentication.signup_activity"
             android:exported="false" />
         <activity
             android:name=".adminUi.subadmin_activity"

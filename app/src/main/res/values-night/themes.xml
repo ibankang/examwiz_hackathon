@@ -4,4 +4,22 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
+
+    <style name="MyTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <!-- Change the color of the box border -->
+        <item name="boxStrokeColor">@color/primary</item>
+        <!-- Change the color of the hint text -->
+        <item name="hintTextColor">@color/primary</item>
+
+    </style>
+
+    <style name="DropTextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu">
+        <!-- Change the color of the box border -->
+        <item name="boxStrokeColor">@color/primary</item>
+        <!-- Change the color of the hint text -->
+        <item name="hintTextColor">@color/primary</item>
+        <!-- Change the color of the dropdown icon -->
+        <item name="endIconTint">@color/primary</item>
+
+    </style>
 </resources>
