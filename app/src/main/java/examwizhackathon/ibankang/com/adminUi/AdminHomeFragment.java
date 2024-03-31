@@ -1,66 +1,211 @@
 package examwizhackathon.ibankang.com.adminUi;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
 
 import examwizhackathon.ibankang.com.R;
+import examwizhackathon.ibankang.com.SubAdmin.subadmin_exam_details_adapter;
+import examwizhackathon.ibankang.com.SubAdmin.subadmin_exam_schedule_details_adapter;
+import examwizhackathon.ibankang.com.view_model;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AdminHomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class AdminHomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    String account_type = "user";
+    RecyclerView recyclerView;
+    SharedPreferences sharedpreferences;
+    FirebaseUser firebaseUser;
+    private FirebaseFirestore db;
+    TextView textView;
+    String guid = null, exam_uid = null;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AdminHomeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AdminHomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AdminHomeFragment newInstance(String param1, String param2) {
-        AdminHomeFragment fragment = new AdminHomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    View view;
+    String rollno = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_home, container, false);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // Get user ID
+        guid = firebaseUser.getUid();
+
+        db = FirebaseFirestore.getInstance();
+
+        view = inflater.inflate(R.layout.fragment_admin_home, container, false);
+
+        recyclerView = view.findViewById(R.id.recycler_view);
+        // Retrieve year_uid from arguments
+        if (getArguments() != null) {
+            rollno = getArguments().getString("rollno");
+        }
+
+        get_exam_details();
+
+
+        //slider
+        ImageSlider imageSlider = view.findViewById(R.id.image_slider);
+        ArrayList<SlideModel> slideModels = new ArrayList<>();
+
+        slideModels.add(new SlideModel(R.drawable.slider2, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.slider3, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.slider4, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.slider5, ScaleTypes.FIT));
+
+        imageSlider.setImageList(slideModels, ScaleTypes.FIT);
+
+        return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        get_user_rollno();
+    }
+
+    void get_exam_details(){
+
+        if (account_type.equals("admin") || account_type.equals("subadmin")) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.getDefault());
+            LinearLayoutManager mlinearLayoutManager = new LinearLayoutManager(getContext());
+            recyclerView.setLayoutManager(mlinearLayoutManager);
+            ArrayList<view_model> dataholder = new ArrayList<>();
+            subadmin_exam_details_adapter wAdapter = new subadmin_exam_details_adapter(dataholder, getContext());
+            CollectionReference collectionReference = db.collection("exam");
+            collectionReference
+                    //.orderBy("date_time",Query.Direction.DESCENDING)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult().size() > 0) {
+                            for (QueryDocumentSnapshot s : task.getResult()) {
+
+                                view_model obj = new view_model(
+                                        s.getString("exam_title"),//1
+                                        s.getString("exam_category"),//2
+                                        s.getString("exam_date"),//3
+                                        s.getString("exam_start"),//4
+                                        //String.valueOf(dateFormat.format(s.getTimestamp("dob").toDate())),//4
+                                        s.getString("exam_end"),//5
+                                        s.getString("seating_plan_live"),//6
+                                        "",//7
+                                        "",//8
+                                        "",//9
+                                        s.getString("exam_uid"));//10
+
+                                dataholder.add(obj);
+                            }
+                            recyclerView.setAdapter(wAdapter);
+                        } else {
+
+                        }
+                    });
+        }
+
+    }
+
+    private void get_exam_details_user() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.getDefault());
+        LinearLayoutManager mlinearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mlinearLayoutManager);
+        ArrayList<view_model> dataholder = new ArrayList<>();
+        subadmin_exam_schedule_details_adapter wAdapter = new subadmin_exam_schedule_details_adapter(dataholder, getContext());
+        CollectionReference collectionReference = db.collection("schedule");
+        collectionReference
+                .whereEqualTo("rollno",rollno)
+                //.orderBy("date_time",Query.Direction.DESCENDING)
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult().size() > 0) {
+                        for (QueryDocumentSnapshot s : task.getResult()) {
+
+                            view_model obj = new view_model(
+                                    s.getString("roomno"),//1
+//                                    s.getString("exam_category"),//2
+//                                    s.getString("exam_date"),//3
+//                                    s.getString("exam_start"),//4
+//                                    //String.valueOf(dateFormat.format(s.getTimestamp("dob").toDate())),//4
+//                                    s.getString("exam_end"),//5
+//                                    s.getString("seating_plan_live"),//6
+                                    "",//7
+                                    "",//7
+                                    "",//7
+                                    "",//7
+                                    "",//7
+                                    "",//7
+                                    "",//8
+                                    "",//9
+                                    s.getString("exam_uid"));//10
+
+                            dataholder.add(obj);
+                        }
+                        recyclerView.setAdapter(wAdapter);
+                    } else {
+
+                    }
+                });
+
+    }
+
+    private void get_user_rollno() {
+
+
+        // Get Firebase user
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            // Get user ID
+            String userId = firebaseUser.getUid();
+
+            // Get Firestore instance
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            // Get document reference
+            DocumentReference docRef = db.collection("account").document(userId);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Retrieve user data
+                            rollno = document.getString("roll_no");
+                            String name = document.getString("name");
+                            Toast.makeText(getContext(), name+"_"+rollno, Toast.LENGTH_SHORT).show();
+
+                            get_exam_details_user();
+                        }
+                    } else {
+                        Log.d("MainActivity", "Document retrieval failed:", task.getException());
+                    }
+                }
+            });
+        }
+    }
+
 }

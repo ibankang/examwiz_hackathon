@@ -17,6 +17,9 @@
         android:theme="@style/Theme.ExamwizHackathon"
         tools:targetApi="31">
         <activity
+            android:name=".profile_activity"
+            android:exported="false" />
+        <activity
             android:name=".Authentication.forgot_password_activity"
             android:exported="false" />
         <activity
@@ -51,8 +54,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
     </application>
 
 </manifest>

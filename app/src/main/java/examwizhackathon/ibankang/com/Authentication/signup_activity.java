@@ -48,6 +48,7 @@ public class signup_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_activity);
 
+
         firebaseAuth = FirebaseAuth.getInstance();
         emailEditText = findViewById(R.id.email_edit_txt);
         passwordEditText = findViewById(R.id.password_edit_txt);
@@ -98,12 +99,10 @@ public class signup_activity extends AppCompatActivity {
         createAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 createAccount();
             }
         });
         /// loginBtnTextView.setOnClickListener(v-> finish());
-
     }
 
     void createAccount() {

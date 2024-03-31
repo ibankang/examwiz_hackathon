@@ -4,6 +4,13 @@
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimaryDark">@color/primary</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
+
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/black_light</item>
     </style>
 
     <style name="Theme.ExamwizHackathon" parent="Base.Theme.ExamwizHackathon" />
@@ -24,5 +31,15 @@
         <!-- Change the color of the dropdown icon -->
         <item name="endIconTint">@color/primary</item>
 
+    </style>
+
+    <style name="Theme.ExamWiz" parent="Base.Theme.ExamwizHackathon" />
+
+    <style name="round_img_view">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#BCD2E8</item>
     </style>
 </resources>
